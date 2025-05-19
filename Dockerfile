@@ -1,4 +1,4 @@
-FROM wordpress:latest
+FROM wordpress:6.8.1-apache
 
 # Install msmtp and ca-certificates
 RUN apt-get update && \
