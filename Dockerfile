@@ -1,0 +1,14 @@
+FROM wordpress:latest
+
+# Install msmtp and ca-certificates
+RUN apt-get update && \
+    apt-get install -y msmtp ca-certificates && \
+    rm -rf /var/lib/apt/lists/*
+
+# Create msmtp config template
+COPY msmtp_entrypoint.sh /usr/local/bin/msmtp_entrypoint.sh
+RUN chmod +x /usr/local/bin/msmtp_entrypoint.sh
+
+# Hook into WordPress entrypoint
+ENTRYPOINT ["/usr/local/bin/msmtp_entrypoint.sh"]
+CMD ["docker-entrypoint.sh", "apache2-foreground"]

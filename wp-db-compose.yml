@@ -1,0 +1,33 @@
+services:
+  wordpress:
+    image: wordpress-smtp:latest
+    ports:
+      - "8080:80"
+    restart: unless-stopped
+    environment:
+      SMTP_HOST: smtp.example.com
+      SMTP_PORT: 587
+      SMTP_USER: outgoing@example.com
+      SMTP_PASS: verysecret
+      SMTP_FROM: outgoing@example.com
+      WORDPRESS_DB_HOST: db
+      WORDPRESS_DB_NAME: wp
+      WORDPRESS_DB_USER: wpuser
+      WORDPRESS_DB_PASSWORD: geheim
+    volumes:
+      - wordpress_data:/var/www/html
+
+  db:
+    image: mariadb
+    restart: unless-stopped
+    environment:
+      MYSQL_DATABASE: wp
+      MYSQL_USER: wpuser
+      MYSQL_PASSWORD: secret
+      MYSQL_ROOT_PASSWORD: supersecret
+    volumes:
+      - db_data:/var/lib/mysql
+
+volumes:
+  wordpress_data:
+  db_data:
