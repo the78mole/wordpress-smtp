@@ -2,6 +2,8 @@
 
 Wordpress docker image with smtp
 
+NOTE: It seems, that wordpress still has problems with this mail config. Use e.g. WP Mail SMTP within Wordpress to send Emails.
+
 ## Usage
 
 First build your image:
