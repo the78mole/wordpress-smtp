@@ -1,6 +1,6 @@
 services:
   wordpress:
-    image: wordpress-smtp:latest
+    image: ghcr.io/the78mole/wordpress-smtp:latest
     ports:
       - "8080:80"
     restart: unless-stopped

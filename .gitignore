@@ -2,3 +2,4 @@
 *.gz
 *.log
 wp-db-compose_test.yml
+docker-compose_test.yml
