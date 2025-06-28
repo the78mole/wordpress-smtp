@@ -2,7 +2,7 @@ FROM wordpress:6.8.1-apache
 
 # Install msmtp, ca-certificates and PHP MySQL extension
 RUN apt-get update && \
-    apt-get install -y msmtp ca-certificates php-mysql && \
+    apt-get install -y msmtp ca-certificates && \
     rm -rf /var/lib/apt/lists/*
 
 # Create msmtp config template
