@@ -2,17 +2,38 @@ name: Build and Push Docker image
 
 on:
   workflow_dispatch:
-  # push:
-  #   branches:
-  #     - main
+  push:
+    branches:
+      - main
+
+permissions:
+  contents: write   # für Tagging & Releases
+  packages: write   # für GHCR push
+  id-token: write
 
 jobs:
-  build:
+  versioning:
     runs-on: ubuntu-latest
+    outputs:
+      version: ${{ steps.semver.outputs.version }}
+      tag: v${{ steps.semver.outputs.version }}
 
-    permissions:
-      contents: read
-      packages: write
+    steps:
+      - name: Checkout repo
+        uses: actions/checkout@v4
+
+      - name: Generate semantic version
+        id: semver
+        uses: paulhatch/semantic-version@v5.4.0
+        with:
+          tag_prefix: "v"
+          major_pattern: "^(feat|fix|refactor)!:"
+          minor_pattern: "^feat:"
+          search_commit_body: true
+
+  build-and-push:
+    needs: versioning
+    runs-on: ubuntu-latest
 
     steps:
       - name: Checkout repo
@@ -30,4 +51,24 @@ jobs:
         with:
           context: .
           push: true
-          tags: ghcr.io/${{ github.repository_owner }}/wordpress-smtp:latest
+          tags: |
+            ghcr.io/${{ github.repository_owner }}/wordpress-smtp:latest
+            ghcr.io/${{ github.repository_owner }}/wordpress-smtp:${{ needs.versioning.outputs.version }}
+
+      - name: Create Git tag
+        if: github.event_name == 'push'
+        run: |
+          git config user.name "${{ github.actor }}"
+          git config user.email "${{ github.actor }}@users.noreply.github.com"
+          git tag ${{ needs.versioning.outputs.tag }}
+          git push origin ${{ needs.versioning.outputs.tag }}
+
+      - name: Create GitHub Release
+        uses: softprops/action-gh-release@v2
+        with:
+          tag_name: ${{ needs.versioning.outputs.tag }}
+          name: Release ${{ needs.versioning.outputs.tag }}
+          body: |
+            🐳 Neues Docker-Image: `${{ needs.versioning.outputs.tag }}`
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
