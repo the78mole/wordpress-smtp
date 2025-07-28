@@ -27,9 +27,10 @@ jobs:
         uses: paulhatch/semantic-version@v5.4.0
         with:
           tag_prefix: "v"
-          major_pattern: "^(feat|fix|refactor)!:"
-          minor_pattern: "^feat:"
+          major_pattern: "/^(feat|fix|refactor)!:/"
+          minor_pattern: "/^feat:/"
           search_commit_body: true
+          bump_each_commit: true
 
   build-and-push:
     needs: versioning
