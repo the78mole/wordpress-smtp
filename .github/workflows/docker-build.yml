@@ -22,15 +22,17 @@ jobs:
       - name: Checkout repo
         uses: actions/checkout@v4
 
-      - name: Generate semantic version
+      - name: 🏷️ Generate release version
         id: semver
         uses: paulhatch/semantic-version@v5.4.0
         with:
+          branch: main
           tag_prefix: "v"
+          version_format: "${major}.${minor}.${patch}"
           major_pattern: "/^(feat|fix|refactor)!:/"
           minor_pattern: "/^feat:/"
-          search_commit_body: true
           bump_each_commit: true
+          search_commit_body: true
 
   build-and-push:
     needs: versioning
