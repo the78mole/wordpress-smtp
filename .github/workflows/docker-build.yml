@@ -21,6 +21,8 @@ jobs:
     steps:
       - name: Checkout repo
         uses: actions/checkout@v4
+        with:
+          fetch-depth: 0  # Full history for accurate versioning
 
       - name: 🏷️ Generate release version
         id: semver
