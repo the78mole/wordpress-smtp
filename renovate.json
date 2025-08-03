@@ -1,20 +1,31 @@
 {
   "$schema": "https://docs.renovatebot.com/renovate-schema.json",
-  "extends": ["config:base"],
+  "extends": [
+    "config:recommended"
+  ],
   "dependencyDashboard": true,
   "dependencyDashboardTitle": "📦 Dependency Updates Dashboard",
-  "enabledManagers": ["dockerfile", "github-actions"],
+  "enabledManagers": [
+    "dockerfile",
+    "github-actions"
+  ],
   "dockerfile": {
     "enabled": true
   },
   "packageRules": [
     {
-      "matchDatasources": ["docker"],
-      "matchPackageNames": ["wordpress"],
+      "matchDatasources": [
+        "docker"
+      ],
+      "matchPackageNames": [
+        "wordpress"
+      ],
       "groupName": "🐳 WordPress base image"
     },
     {
-      "matchManagers": ["github-actions"],
+      "matchManagers": [
+        "github-actions"
+      ],
       "groupName": "⚡ GitHub Actions",
       "automerge": true,
       "automergeType": "pr"
