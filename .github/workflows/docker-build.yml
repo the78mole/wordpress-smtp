@@ -39,6 +39,10 @@ jobs:
   build-and-push:
     needs: versioning
     runs-on: ubuntu-latest
+    permissions:
+      contents: write    # benötigt für Tag push & Release
+      packages: write    # benötigt zum Pushen zu ghcr
+      id-token: write
 
     steps:
       - name: Checkout repo
@@ -77,3 +81,4 @@ jobs:
             🐳 Neues Docker-Image: `${{ needs.versioning.outputs.tag }}`
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
